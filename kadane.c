@@ -6,6 +6,24 @@
  * achar o sub-array continuo com a maior soma dentro um array, neste caso nós conseguimos
  * fazer a soma das linhas da matrix e fazer um push em uma lista, aplicando o algoritmo de
  * kadane nesta lista nós conseguimos achar a solução do problema
+ * 
+ *  No código da solução as seguintes funções, com suas devidas responsabilidades:
+ *      main : função principal, controla o fluxo do programa.
+ *      parser : transforma a matriz bidimensional em vetor unidimensional, retorna também
+ *          o tamanho da mesma.
+ *      readLine : lê a linha do arquivo e cria um buffer para o valor.
+ *      assertResponse : função para conferência do resultado obtido com o resultado no
+ *          arquivo de conferência proposto pela professora.
+ *      maxSubMatrizSum: calcula soma máxima usando técnica do prefixo e chama a função
+ *          kadane.
+ *      kadane : encontra a soma máxima do subvetor de uma coluna específica.
+ *      freeList : libera memória
+ *      newListItem : cria novo item em uma lista, com valor específico.
+ *      push : adiciona novo valor ao final da lista
+ *
+ *  O motor da solução encontra-se nas funções maxSubMatrizSum e Kadane, onde é feita a iteração
+ *  das colunas, somando-as, para finalmente aplicar o algoritmo de Kadane em cada linha, encontrando
+ *  a soma máxima. 
  */
 
 /***********************************/

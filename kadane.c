@@ -1,3 +1,18 @@
+/**
+ * Este algoritmo foi criado para a disciplina de Análise e Projeto de Algoritmos,
+ * o algoritmo é usado para achar a submatrix com a maior soma dentro de uma matrix.
+ *
+ * O algoritmo usa o algoritmo de kadane para achar a solução, este algoritmo consegue
+ * achar o sub-array continuo com a maior soma dentro um array, neste caso nós conseguimos
+ * fazer a soma das linhas da matrix e fazer um push em uma lista, aplicando o algoritmo de
+ * kadane nesta lista nós conseguimos achar a solução do problema
+ */
+
+/***********************************/
+/* José Luís Rodes Maciel Júnior   */
+/* Fabíola Favero Seghetto         */
+/***********************************/
+
 #include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -124,18 +139,16 @@ void push(List *l, int v) {
 }
 
 int kadane(List *list) {
-    // Stores current and maximum sum 
     int curr_sum = 0;
     int max_sum = INT_MIN;
     List *i = list;
-    // Traverse the array v 
+    // Itera sobre a lista 
     while(i != NULL) { 
   
-        // Add the value of the 
-        // current element 
+        // Adiciona o valor atual a soma 
         curr_sum += i->value;
   
-        // Update the maximum sum 
+        // Atualiza a soma máxima 
         if (curr_sum > max_sum) {
             max_sum = curr_sum;
         }
@@ -146,7 +159,6 @@ int kadane(List *list) {
         i = i->next;
     }
   
-    // Return the maximum sum 
     return max_sum;
 }
 
@@ -156,60 +168,49 @@ int maxSubMatrixSum(int *matrix, int matrix_size) {
 
     int prefix[row][column];
 
-    // Traverse the matrix, prefix 
-    // and initialize it will all 0s 
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j < column; j++) {
-            prefix[i][j] = 0;
+    // Inicializando uma nova matrix com 0 
+    for (int r = 0; r < row; r++) {
+        for (int c = 0; c < column; c++) {
+            prefix[r][c] = 0;
         }
     }
     
-    // Calculate prefix sum of all 
-    // rows of matrix A[][] and 
-    // store in matrix prefix[] 
-    for (int i = 0; i < row; i++) { 
-        for (int j = 0; j < column; j++) { 
+    // Calcula as somas dos items da mesma linha e salva na nova matrix
+    for (int r = 0; r < row; r++) { 
+        for (int c = 0; c < column; c++) { 
             // Update the prefix[][] 
-            if (j == 0) {
-                prefix[i][j] = matrix[j + (i * row)];
+            if (c == 0) {
+                prefix[r][c] = matrix[c + (r * row)];
             } else {
-                prefix[i][j] = matrix[j + (i * row)] + prefix[i][j - 1];
+                prefix[r][c] = matrix[c + (r * row)] + prefix[r][c - 1];
             }
         } 
     }
 
     int max_sum = INT_MIN;
-    // Iterate for starting column 
-    for (int i = 0; i < column; i++) {
-        // Iterate for last column 
-        for (int j = i; j < column; j++) {
-            // To store current array 
-            // elements 
+    // Itera sobre a coluna inicial da matrix prefix
+    for (int initial_column = 0; initial_column < column; initial_column++) {
+        // Itera sobre as colunas com o offset da coluna inicial da matrix prefix 
+        for (int c = initial_column; c < column; c++) {
             List *v = NULL;
-            // Traverse every row 
-            for (int k = 0; k < row; k++) {
-  
-                // Store the sum of the 
-                // kth row 
+            // Itera por todas as linhas da matrix prefix
+            for (int r = 0; r < row; r++) { 
                 int el = 0;
   
-                // Update the prefix 
-                // sum 
-                if (i == 0) {
-                    el = prefix[k][j];
+                if (initial_column == 0) {
+                    el = prefix[r][c];
                 } else {
-                    el = prefix[k][j] - prefix[k][i - 1];
+                    el = prefix[r][c] - prefix[r][initial_column - 1];
                 }
 
-                // Push it in a vector 
                 if (v == NULL) {
                     v = newListItem(el);
                 } else {
                     push(v, el);
                 }
             }
-            // Update the maximum 
-            // overall sum 
+            // Atualiza o valor de soma máxima com o valor mais alto,
+            // sendo o valor atual ou o retornado pela função kadane
             max_sum = max(max_sum, kadane(v));
             freeList(v);
         } 
